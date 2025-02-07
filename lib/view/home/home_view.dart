@@ -1,24 +1,44 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slider_drawer/flutter_slider_drawer.dart';
 import 'package:lottie/lottie.dart';
 import 'package:todo/extensions/space_ext.dart';
 import 'package:todo/utils/app_colours.dart';
 import 'package:todo/utils/app_str.dart';
 import 'package:todo/utils/constants.dart';
+import 'package:todo/view/home/component/home_app_bar.dart';
+import 'package:todo/view/home/component/slider_drawer.dart';
+import 'package:todo/view/home/component/slider_drawer.dart';
 import 'package:todo/view/home/component/task_widget.dart';
 import 'package:todo/view/home/widget/Fab.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   const HomeView({super.key});
 
   @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  @override
   Widget build(BuildContext context) {
+    final GlobalKey<SliderDrawerState> drawerKey =
+        GlobalKey<SliderDrawerState>();
     final List<int> dummy = [];
     TextTheme textTheme = Theme.of(context).textTheme;
     return Scaffold(
       backgroundColor: Colors.white,
       floatingActionButton: Fab(),
-      body: _homebuildbody(textTheme, dummy),
+      body: SliderDrawer(
+        key: drawerKey,
+        isDraggable: false,
+        animationDuration: 1000,
+        slider: CustomDrawer(),
+        appBar: HomeAppBar(
+          drawerKey: drawerKey,
+        ),
+        child: _homebuildbody(textTheme, dummy),
+      ),
     );
   }
 

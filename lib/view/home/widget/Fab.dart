@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:todo/utils/app_colours.dart';
+import 'package:todo/view/tasks/task_view.dart';
 
 class Fab extends StatelessWidget {
   const Fab({
@@ -12,7 +13,8 @@ class Fab extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        log('Floating Button Clicked');
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => const TaskView()));
       },
       child: Material(
         borderRadius: BorderRadius.circular(10.0),
