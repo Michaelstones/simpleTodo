@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slider_drawer/flutter_slider_drawer.dart';
 import 'package:lottie/lottie.dart';
 import 'package:todo/extensions/space_ext.dart';
+import 'package:todo/model/task.dart';
 import 'package:todo/utils/app_colours.dart';
 import 'package:todo/utils/app_str.dart';
 import 'package:todo/utils/constants.dart';
 import 'package:todo/view/home/component/home_app_bar.dart';
-import 'package:todo/view/home/component/slider_drawer.dart';
 import 'package:todo/view/home/component/slider_drawer.dart';
 import 'package:todo/view/home/component/task_widget.dart';
 import 'package:todo/view/home/widget/Fab.dart';
@@ -24,7 +24,7 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     final GlobalKey<SliderDrawerState> drawerKey =
         GlobalKey<SliderDrawerState>();
-    final List<int> dummy = [];
+    final List<int> dummy = [1];
     TextTheme textTheme = Theme.of(context).textTheme;
     return Scaffold(
       backgroundColor: Colors.white,
@@ -104,7 +104,16 @@ class _HomeViewState extends State<HomeView> {
                                 ),
                               ]),
                           key: Key(index.toString()),
-                          child: TaskWidget());
+                          child: TaskWidget(
+                            task: Task(
+                              id: '1',
+                              title: 'home',
+                              subTitle: 'subTitle',
+                              isComplete: true,
+                              createdAtTime: DateTime.now(),
+                              createdAtDate: DateTime.now(),
+                            ),
+                          ));
                     })
                 : Column(
                     mainAxisAlignment: MainAxisAlignment.center,

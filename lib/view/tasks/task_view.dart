@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_cupertino_date_picker_fork/flutter_cupertino_date_picker_fork.dart';
 import 'package:todo/extensions/space_ext.dart';
+import 'package:todo/model/task.dart';
 import 'package:todo/utils/app_colours.dart';
 import 'package:todo/utils/app_str.dart';
 import 'package:todo/view/tasks/component/date_selection_picker.dart';
@@ -8,7 +9,15 @@ import 'package:todo/view/tasks/component/rep_txt_field.dart';
 import 'package:todo/view/tasks/widget/task_view_appbar.dart';
 
 class TaskView extends StatefulWidget {
-  const TaskView({super.key});
+  const TaskView(
+      {super.key,
+      required this.task,
+      required this.titleController,
+      required this.descriptionController});
+
+  final TextEditingController? titleController;
+  final TextEditingController? descriptionController;
+  final Task? task;
 
   @override
   State<TaskView> createState() => _TaskViewState();
@@ -18,8 +27,7 @@ class _TaskViewState extends State<TaskView> {
   @override
   Widget build(BuildContext context) {
     var textTheme = Theme.of(context).textTheme;
-    final TextEditingController titleController = TextEditingController();
-    final TextEditingController descriptionController = TextEditingController();
+
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus!.unfocus(),
       child: Scaffold(
@@ -28,7 +36,7 @@ class _TaskViewState extends State<TaskView> {
           child: Column(
             children: [
               _buildTopSideText(textTheme),
-              _buildMainAction(titleController, descriptionController, context),
+              _buildMainAction(context),
               _buildButton()
             ],
           ),
@@ -77,8 +85,7 @@ class _TaskViewState extends State<TaskView> {
     );
   }
 
-  SizedBox _buildMainAction(TextEditingController titleController,
-      TextEditingController descriptionController, BuildContext context) {
+  SizedBox _buildMainAction(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       height: 530,
@@ -92,10 +99,10 @@ class _TaskViewState extends State<TaskView> {
               // style: textTheme.headlineMedium,
             ),
           ),
-          RepTextField(controller: titleController),
+          RepTextField(controller: widget.titleController!, isForDesc: false),
           10.h,
           RepTextField(
-            controller: descriptionController,
+            controller: widget.descriptionController!,
             isForDesc: true,
           ),
           DateTimeSelection(

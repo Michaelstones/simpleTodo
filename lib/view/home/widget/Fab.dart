@@ -14,7 +14,13 @@ class Fab extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => const TaskView()));
+            context,
+            MaterialPageRoute(
+                builder: (context) => TaskView(
+                      titleController: null,
+                      descriptionController: null,
+                      task: null,
+                    )));
       },
       child: Material(
         borderRadius: BorderRadius.circular(10.0),
