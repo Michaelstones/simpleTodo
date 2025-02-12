@@ -6,9 +6,13 @@ class RepTextField extends StatelessWidget {
     super.key,
     required this.controller,
     this.isForDesc = false,
+    required this.onFieldSubmitted,
+    required this.onChanged,
   });
 
   final TextEditingController controller;
+  final Function(String)? onFieldSubmitted;
+  final Function(String)? onChanged;
   final bool isForDesc;
 
   @override
@@ -21,8 +25,8 @@ class RepTextField extends StatelessWidget {
           controller: controller,
           maxLines: !isForDesc ? 6 : null,
           cursorHeight: !isForDesc ? 60 : null,
-          onFieldSubmitted: (value) {},
-          onChanged: (value) {},
+          onFieldSubmitted: onFieldSubmitted,
+          onChanged: onChanged,
           style: TextStyle(color: Colors.black),
           decoration: InputDecoration(
               hintText: isForDesc ? AppString.addNote : null,

@@ -5,9 +5,13 @@ class DateTimeSelection extends StatelessWidget {
     super.key,
     required this.onTap,
     required this.title,
+    required this.time,
+    this.isTime = false,
   });
   final VoidCallback onTap;
   final String title;
+  final String time;
+  final bool isTime;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -32,13 +36,13 @@ class DateTimeSelection extends StatelessWidget {
               ),
               Container(
                 height: 35,
-                width: 80,
+                width: isTime ? 80 : 150,
                 margin: EdgeInsets.only(right: 10),
                 decoration: BoxDecoration(
                     color: Colors.grey.shade100,
                     borderRadius: BorderRadius.circular(10)),
                 child: Center(
-                  child: Text(title),
+                  child: Text(time),
                 ),
               ),
             ],

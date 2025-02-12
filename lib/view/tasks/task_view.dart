@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_cupertino_date_picker_fork/flutter_cupertino_date_picker_fork.dart';
+import 'package:intl/intl.dart';
 import 'package:todo/extensions/space_ext.dart';
 import 'package:todo/model/task.dart';
 import 'package:todo/utils/app_colours.dart';
@@ -24,6 +25,49 @@ class TaskView extends StatefulWidget {
 }
 
 class _TaskViewState extends State<TaskView> {
+  var title;
+  var subtitle;
+  DateTime? date;
+  DateTime? time;
+
+  String showTime(DateTime? time) {
+    if (widget.task?.createdAtTime == null) {
+      if (time == null) {
+        return DateFormat('hh:mm a').format(DateTime.now()).toString();
+      }
+      return DateFormat('hh:mm a').format(time).toString();
+    }
+    return DateFormat('hh:mm a').format(widget.task!.createdAtTime).toString();
+  }
+
+  String showDate(DateTime? date) {
+    if (widget.task != null && widget.task!.createdAtDate != null) {
+      return DateFormat.yMMMEd().format(widget.task!.createdAtDate).toString();
+    } else if (date != null) {
+      return DateFormat.yMMMEd().format(date).toString();
+    } else {
+      return DateFormat.yMMMEd().format(DateTime.now()).toString();
+    }
+  }
+
+  DateTime showDateAsDateTime(DateTime? date) {
+    if (widget.task?.createdAtDate == null) {
+      if (date == null) {
+        return DateTime.now();
+      }
+      return date;
+    }
+    return widget.task!.createdAtDate;
+  }
+
+  bool isTaskExist() {
+    if (widget.titleController?.text == null &&
+        widget.descriptionController?.text == null) {
+      return true;
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     var textTheme = Theme.of(context).textTheme;
@@ -99,36 +143,72 @@ class _TaskViewState extends State<TaskView> {
               // style: textTheme.headlineMedium,
             ),
           ),
-          RepTextField(controller: widget.titleController!, isForDesc: false),
+          RepTextField(
+            controller: widget.titleController ?? TextEditingController(),
+            isForDesc: false,
+            onFieldSubmitted: (String inputTitle) {
+              title = inputTitle;
+            },
+            onChanged: (String inputTitle) {
+              title = inputTitle;
+            },
+          ),
           10.h,
           RepTextField(
-            controller: widget.descriptionController!,
+            controller: widget.descriptionController ?? TextEditingController(),
             isForDesc: true,
+            onFieldSubmitted: (String inputSubtitle) {
+              subtitle = inputSubtitle;
+            },
+            onChanged: (String inputSubtitle) {
+              subtitle = inputSubtitle;
+            },
           ),
           DateTimeSelection(
-              onTap: () {
-                showModalBottomSheet(
-                    context: context,
-                    builder: (_) => SizedBox(
-                          height: 280,
-                          child: TimePickerWidget(
-                            onChange: (_, __) {},
-                            dateFormat: 'HH:mm',
-                            onConfirm: (dateTime, _) {},
-                          ),
-                        ));
-              },
-              title: AppString.timeString),
+            onTap: () {
+              showModalBottomSheet(
+                  context: context,
+                  builder: (_) => SizedBox(
+                        height: 280,
+                        child: TimePickerWidget(
+                          initDateTime: showDateAsDateTime(time),
+                          onChange: (_, __) {},
+                          dateFormat: 'HH:mm',
+                          onConfirm: (dateTime, _) {
+                            setState(() {
+                              if (widget.task?.createdAtTime == null) {
+                                time = dateTime;
+                              }
+                              widget.task!.createdAtTime = dateTime;
+                            });
+                          },
+                        ),
+                      ));
+            },
+            title: 'Time',
+            time: showTime(time),
+            isTime: true,
+          ),
           DateTimeSelection(
-              onTap: () {
-                DatePicker.showDatePicker(
-                  context,
-                  minDateTime: DateTime.now(),
-                  maxDateTime: DateTime(2030, 4, 5),
-                  onConfirm: (dateTime, _) {},
-                );
-              },
-              title: AppString.dateString),
+            onTap: () {
+              DatePicker.showDatePicker(
+                context,
+                minDateTime: DateTime.now(),
+                maxDateTime: DateTime(2030, 4, 5),
+                initialDateTime: showDateAsDateTime(date),
+                onConfirm: (dateTime, _) {
+                  setState(() {
+                    if (widget.task?.createdAtDate == null) {
+                      time = dateTime;
+                    }
+                    widget.task!.createdAtDate = dateTime;
+                  });
+                },
+              );
+            },
+            title: AppString.dateString,
+            time: showDate(date),
+          ),
         ],
       ),
     );
@@ -150,7 +230,9 @@ class _TaskViewState extends State<TaskView> {
           ),
           RichText(
               text: TextSpan(
-                  text: AppString.addNewTask,
+                  text: isTaskExist()
+                      ? AppString.addNewTask
+                      : AppString.updateCurrentTask,
                   style: textTheme.titleLarge,
                   children: [
                 TextSpan(

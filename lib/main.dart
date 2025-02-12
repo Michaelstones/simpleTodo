@@ -65,8 +65,8 @@ class MyApp extends ConsumerWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: user != null ? const HomeView() : LoginView(),
-      // home: LoginView(),
+      // home: user != null ? const HomeView() : LoginView(),
+      home: HomeView(),
     );
   }
 }

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:todo/utils/app_colours.dart';
 import 'package:todo/view/tasks/task_view.dart';
